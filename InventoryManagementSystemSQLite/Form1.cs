@@ -17,6 +17,7 @@ namespace InventoryManagementSystemSQLite
         {
             InitializeComponent();
             CreateProductType();
+            CreateCategory();
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -32,7 +33,6 @@ namespace InventoryManagementSystemSQLite
                 {
                     if (!context.ProductType.Any(s => s.Name == type))//This ensures that we are not creating duplicates
                         context.ProductType.Add(new Models.ProductType() { Name = type });
-                    
                 }
                 context.SaveChanges();
                 //Will delete later
@@ -41,6 +41,24 @@ namespace InventoryManagementSystemSQLite
                     lstView.Items.Add(pt.Name);
                 }
             }
+        }
+        private void CreateCategory()
+        {
+            using (DataContext context = new DataContext())
+            {
+                string[] automaticCategoryTypes = { "Men", "Women", "Unisex" };
+                foreach (string cat in automaticCategoryTypes)
+                {
+                    if (!context.Category.Any(s => s.Name == cat))
+                        context.Category.Add(new Models.Category() { Name = cat });
+                }
+                context.SaveChanges();
+                foreach (var cat in context.Category)
+                {
+                    lstView.Items.Add(cat.Name);
+                }
+            }
+
         }
     }
 }
