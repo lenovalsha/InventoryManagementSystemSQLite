@@ -31,12 +31,12 @@ namespace InventoryManagementSystemSQLite
                 string[] automaticProductTypes = { "Top", "Bottom", "Shoes", "Hats" };
                 foreach (string type in automaticProductTypes)
                 {
-                    if (!context.ProductType.Any(s => s.Name == type))//This ensures that we are not creating duplicates
-                        context.ProductType.Add(new Models.ProductType() { Name = type });
+                    if (!context.ProductTypes.Any(s => s.Name == type))//This ensures that we are not creating duplicates
+                        context.ProductTypes.Add(new Models.ProductType() { Name = type });
                 }
                 context.SaveChanges();
                 //Will delete later
-                foreach (var pt in context.ProductType)
+                foreach (var pt in context.ProductTypes)
                 {
                     lstView.Items.Add(pt.Name);
                 }
@@ -49,16 +49,23 @@ namespace InventoryManagementSystemSQLite
                 string[] automaticCategoryTypes = { "Men", "Women", "Unisex" };
                 foreach (string cat in automaticCategoryTypes)
                 {
-                    if (!context.Category.Any(s => s.Name == cat))
-                        context.Category.Add(new Models.Category() { Name = cat });
+                    if (!context.Categories.Any(s => s.Name == cat))
+                        context.Categories.Add(new Models.Category() { Name = cat });
                 }
                 context.SaveChanges();
-                foreach (var cat in context.Category)
+                //will delete later:)
+                foreach (var cat in context.Categories)
                 {
                     lstView.Items.Add(cat.Name);
                 }
             }
 
+        }
+
+        private void btnSuppliers_Click(object sender, EventArgs e)
+        {
+            Supplier supplierForm = new Supplier();
+            supplierForm.Show();
         }
     }
 }

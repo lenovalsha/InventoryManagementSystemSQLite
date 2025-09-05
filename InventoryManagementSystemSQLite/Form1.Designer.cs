@@ -29,22 +29,34 @@
         private void InitializeComponent()
         {
             this.lstView = new System.Windows.Forms.ListView();
+            this.btnSuppliers = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lstView
             // 
             this.lstView.HideSelection = false;
-            this.lstView.Location = new System.Drawing.Point(124, 12);
+            this.lstView.Location = new System.Drawing.Point(12, 284);
             this.lstView.Name = "lstView";
-            this.lstView.Size = new System.Drawing.Size(525, 279);
+            this.lstView.Size = new System.Drawing.Size(529, 105);
             this.lstView.TabIndex = 0;
             this.lstView.UseCompatibleStateImageBehavior = false;
+            // 
+            // btnSuppliers
+            // 
+            this.btnSuppliers.Location = new System.Drawing.Point(463, 12);
+            this.btnSuppliers.Name = "btnSuppliers";
+            this.btnSuppliers.Size = new System.Drawing.Size(105, 31);
+            this.btnSuppliers.TabIndex = 1;
+            this.btnSuppliers.Text = "Suppliers";
+            this.btnSuppliers.UseVisualStyleBackColor = true;
+            this.btnSuppliers.Click += new System.EventHandler(this.btnSuppliers_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(852, 401);
+            this.Controls.Add(this.btnSuppliers);
             this.Controls.Add(this.lstView);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -56,6 +68,7 @@
         #endregion
 
         private System.Windows.Forms.ListView lstView;
+        private System.Windows.Forms.Button btnSuppliers;
     }
 }
 

@@ -12,7 +12,8 @@ namespace InventoryManagementSystemSQLite.Models
         public string CompanyName { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
-        public string Region { get; set; }
+        public Region Region { get; set; }
+        public int RegionId { get; set; }
         public string PostalCode { get; set; }
         public string Country { get; set; }
         public string Phone { get; set; }
