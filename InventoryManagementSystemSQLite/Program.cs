@@ -18,12 +18,14 @@ namespace InventoryManagementSystemSQLite
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
-
             //ADDED THIS
             //this ensures that the database file is created if it doesnt exist
             DatabaseFacade facade = new DatabaseFacade(new DataContext());
             facade.EnsureCreated();
+
+
+            Application.Run(new Form1());
+
         }
       
     }

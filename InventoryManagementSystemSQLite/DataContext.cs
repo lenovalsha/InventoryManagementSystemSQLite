@@ -16,11 +16,11 @@ namespace InventoryManagementSystemSQLite
 
         //we need to define the tables in our database
         //Create the tables
-        public DbSet<Models.Category> Categories { get; set; }
-        public DbSet<Models.ProductType> ProductTypes { get; set; }
-        public DbSet<Models.Product> Products { get; set; }
-        public DbSet<Models.Supplier> Suppliers { get; set; }
-        public DbSet<Models.Region> Regions { get; set; }
+        public DbSet<Models.Category> Category { get; set; }
+        public DbSet<Models.ProductType> ProductType { get; set; }
+        public DbSet<Models.Product> Product { get; set; }
+        public DbSet<Models.Supplier> Supplier { get; set; }
+        public DbSet<Models.Region> Region { get; set; }
 
 
 

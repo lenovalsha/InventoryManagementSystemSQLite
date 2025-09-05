@@ -12,9 +12,11 @@ namespace InventoryManagementSystemSQLite
 {
     public partial class Supplier : Form
     {
+        private List<Models.Region> regionList;
         public Supplier()
         {
             InitializeComponent();
+            AddRegions();
         }
         private void AddRegions()
         {
@@ -26,13 +28,17 @@ namespace InventoryManagementSystemSQLite
                 foreach (string region in regions)
                 {
                     //see if they already exist
-                    if (!context.Regions.Any(r => r.Name == region))
+                    if (!context.Region.Any(r => r.Name == region))
                     {
                         //if not then create it
-                        context.Regions.Add(new Models.Region() { Name = region });
+                        context.Region.Add(new Models.Region() { Name = region });
                     }
                 }
-
+                context.SaveChanges();
+                foreach (var region in context.Region.ToList())
+                {
+                    cmbRegion.Items.Add(region.Name);
+                }
             }
         }
         private void textBox4_TextChanged(object sender, EventArgs e)
