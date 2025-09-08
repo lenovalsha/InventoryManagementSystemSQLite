@@ -49,6 +49,7 @@
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.btnTester = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dtvSuppliers)).BeginInit();
             this.SuspendLayout();
             // 
@@ -108,6 +109,8 @@
             this.dtvSuppliers.Name = "dtvSuppliers";
             this.dtvSuppliers.Size = new System.Drawing.Size(533, 164);
             this.dtvSuppliers.TabIndex = 5;
+            this.dtvSuppliers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtvSuppliers_CellContentClick);
+            this.dtvSuppliers.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dtvSuppliers_CellMouseClick);
             // 
             // label2
             // 
@@ -232,11 +235,24 @@
             this.btnTester.UseVisualStyleBackColor = true;
             this.btnTester.Click += new System.EventHandler(this.btnTester_Click);
             // 
+            // btnAdd
+            // 
+            this.btnAdd.BackColor = System.Drawing.Color.Lime;
+            this.btnAdd.ForeColor = System.Drawing.Color.Black;
+            this.btnAdd.Location = new System.Drawing.Point(217, 289);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnAdd.TabIndex = 22;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.UseVisualStyleBackColor = false;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
             // Supplier
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(557, 557);
+            this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnTester);
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.label8);
@@ -290,5 +306,6 @@
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btnTester;
+        private System.Windows.Forms.Button btnAdd;
     }
 }

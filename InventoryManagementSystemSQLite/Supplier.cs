@@ -23,13 +23,16 @@ namespace InventoryManagementSystemSQLite
         string postalCode;
         string phoneNumber;
         string email;
-
+        bool isSelected = false;
 
 
         public Supplier()
         {
             InitializeComponent();
             AddAllRegions();
+            btnEditSupplier.Enabled = false;
+            btnAdd.Visible = false;
+            DisableAll();
         }
         private void AddAllRegions()
         {
@@ -60,7 +63,10 @@ namespace InventoryManagementSystemSQLite
             if (r.IsMatch(postal))
                 postalCode = r.Match(postal).Value;
             else
-                MessageBox.Show("Invalid Postal");
+            {
+                postalCode = string.Empty;
+                MessageBox.Show("Invalid postal code");
+            }
         }
         private void EmailValidation(string tmpEmail)
         {
@@ -68,7 +74,10 @@ namespace InventoryManagementSystemSQLite
             if (regex.IsMatch(tmpEmail))
                 email = tmpEmail;
             else
-                MessageBox.Show("Invalid Email");
+            {
+                email = string.Empty;
+                MessageBox.Show("Invalid email");
+            }
         }
         private void PhoneValidation(string phone)
         {
@@ -76,18 +85,53 @@ namespace InventoryManagementSystemSQLite
             if (regex.IsMatch(phone))
                 phoneNumber = phone;
             else
+            {
+                phoneNumber = string.Empty;
                 MessageBox.Show("Invalid phone");
+            }
         }
         private void ShowAllSuppliers()
         {
             using (DataContext context = new DataContext())
             {
-                dtvSuppliers.DataSource = context.Supplier.ToList();
-                
-                
+                //This will allow us to pick only the fields that we want to see, (it was originally showing RegionId and products)
+                dtvSuppliers.DataSource = context.Supplier.Select(x => new { x.CompanyName, x.Address, x.City, x.Region.Name, x.PostalCode, x.Phone, x.Email }).ToList();
             }
-            
+
         }
+        #region TextBoxes and User Controls
+        private void ClearAll()
+        {
+            txtCompanyName.Text = string.Empty;
+            txtAddress.Text = string.Empty;
+            txtCity.Text = string.Empty;
+            cmbRegion.Text = string.Empty;
+            txtPostalCode.Text = string.Empty;
+            txtPhoneNumber.Text = string.Empty;
+            txtEmail.Text = string.Empty;
+        }
+        private void DisableAll()
+        {
+            txtCompanyName.Enabled = false;
+            txtAddress.Enabled = false;
+            txtCity.Enabled = false;
+            cmbRegion.Enabled = false;
+            txtPostalCode.Enabled = false;
+            txtPhoneNumber.Enabled = false;
+            txtEmail.Enabled = false;
+
+        }
+        private void EnableAll()
+        {
+            txtCompanyName.Enabled = true;
+            txtAddress.Enabled = true;
+            txtCity.Enabled = true;
+            cmbRegion.Enabled = true;
+            txtPostalCode.Enabled = true;
+            txtPhoneNumber.Enabled = true;
+            txtEmail.Enabled = true;
+        }
+        #endregion
         private void CreateSupplier()
         {
             using (DataContext context = new DataContext())
@@ -100,12 +144,12 @@ namespace InventoryManagementSystemSQLite
                 address = txtAddress.Text;
                 city = txtCity.Text;
                 //Make sure nothing is null
-                if (companyName != string.Empty || address != string.Empty || city != string.Empty ||
-                    cmbRegion.Text != string.Empty || phoneNumber != string.Empty || email != string.Empty)
+                if (companyName != string.Empty && address != string.Empty && city != string.Empty &&
+                    cmbRegion.Text != string.Empty && phoneNumber != string.Empty && email != string.Empty)
                 {
                     //Lets find the selected region and get the Id
-                    var region = context.Region.FirstOrDefault(x=> x.Name == cmbRegion.Text);
-                    if(region != null) 
+                    var region = context.Region.FirstOrDefault(x => x.Name == cmbRegion.Text);
+                    if (region != null)
                         regionId = region.Id;
                     context.Supplier.Add(new Models.Supplier()
                     {
@@ -118,8 +162,19 @@ namespace InventoryManagementSystemSQLite
                         Email = email
                     });
                     context.SaveChanges();
-                }else
+                    ClearAll();
+                    DisableAll();
+                    btnAdd.Enabled = false;
+                }
+                else
                     MessageBox.Show("Please complete all required field");
+            }
+        }
+        private void UpdateSupplier()
+        {
+            using (DataContext context = new DataContext())
+            {
+
             }
         }
         private void textBox4_TextChanged(object sender, EventArgs e)
@@ -134,9 +189,16 @@ namespace InventoryManagementSystemSQLite
 
         private void btnAddNewSupplier_Click(object sender, EventArgs e)
         {
-            CreateSupplier();
+            ClearAll();
+            EnableAll();
+            btnAdd.Visible = true;
+            btnAdd.Enabled = true;
         }
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            CreateSupplier();
 
+        }
         private void btnTester_Click(object sender, EventArgs e)
         {
             string capitalized = txtPostalCode.Text.ToUpper();
@@ -151,5 +213,29 @@ namespace InventoryManagementSystemSQLite
         {
             ShowAllSuppliers();
         }
+        private void dtvSuppliers_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            //Avoid errors when clicking the header row
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dtvSuppliers.Rows[e.RowIndex];
+                txtCompanyName.Text = row.Cells["CompanyName"].Value.ToString();
+                txtAddress.Text = row.Cells["Address"].Value.ToString();
+                txtCity.Text = row.Cells["City"].Value.ToString();
+                //cmbRegion.Text = row.Cells["Region"].ToString();
+                txtPostalCode.Text = row.Cells["PostalCode"].Value.ToString();
+                txtPhoneNumber.Text = row.Cells["Phone"].Value.ToString();
+                txtEmail.Text = row.Cells["Email"].Value.ToString();
+                btnEditSupplier.Enabled = true;
+            }
+            else
+                btnEditSupplier.Enabled = false;
+        }
+
+        private void dtvSuppliers_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
     }
 }
