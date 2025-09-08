@@ -92,6 +92,7 @@
             this.btnEditSupplier.TabIndex = 3;
             this.btnEditSupplier.Text = "Edit Supplier";
             this.btnEditSupplier.UseVisualStyleBackColor = true;
+            this.btnEditSupplier.Click += new System.EventHandler(this.btnEditSupplier_Click);
             // 
             // btnDeleteSupplier
             // 

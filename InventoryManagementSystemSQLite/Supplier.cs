@@ -23,7 +23,7 @@ namespace InventoryManagementSystemSQLite
         string postalCode;
         string phoneNumber;
         string email;
-        int selectedId = 0;
+        public int selectedId = 0;
         bool isSelected = false;
 
 
@@ -58,6 +58,17 @@ namespace InventoryManagementSystemSQLite
                 }
             }
         }
+        #region Validation Regex
+        private void ValidateAllEntry()
+        {
+            //Validate them first
+            PostalValidation(txtPostalCode.Text);
+            PhoneValidation(txtPhoneNumber.Text);
+            EmailValidation(txtEmail.Text);
+            companyName = txtCompanyName.Text;
+            address = txtAddress.Text;
+            city = txtCity.Text;
+        }
         private void PostalValidation(string postal)
         {
             Regex r = new Regex(@"[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ][0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]");
@@ -91,15 +102,7 @@ namespace InventoryManagementSystemSQLite
                 MessageBox.Show("Invalid phone");
             }
         }
-        private void ShowAllSuppliers()
-        {
-            using (DataContext context = new DataContext())
-            {
-                //This will allow us to pick only the fields that we want to see, (it was originally showing RegionId and products)
-                dtvSuppliers.DataSource = context.Supplier.Select(x => new {x.Id, x.CompanyName, x.Address, x.City, x.Region.Name, x.PostalCode, x.Phone, x.Email }).ToList();
-            }
-
-        }
+        #endregion
         #region TextBoxes and User Controls
         private void ClearAll()
         {
@@ -138,12 +141,7 @@ namespace InventoryManagementSystemSQLite
             using (DataContext context = new DataContext())
             {
                 //Validate them first
-                PostalValidation(txtPostalCode.Text);
-                PhoneValidation(txtPhoneNumber.Text);
-                EmailValidation(txtEmail.Text);
-                companyName = txtCompanyName.Text;
-                address = txtAddress.Text;
-                city = txtCity.Text;
+                ValidateAllEntry();
                 //Make sure nothing is null
                 if (companyName != string.Empty && address != string.Empty && city != string.Empty &&
                     cmbRegion.Text != string.Empty && phoneNumber != string.Empty && email != string.Empty)
@@ -171,12 +169,43 @@ namespace InventoryManagementSystemSQLite
                     MessageBox.Show("Please complete all required field");
             }
         }
-        private void UpdateSupplier()
+        private void ShowAllSuppliers()
         {
             using (DataContext context = new DataContext())
             {
-
+                //This will allow us to pick only the fields that we want to see, (it was originally showing RegionId and products)
+                dtvSuppliers.DataSource = context.Supplier.Select(x => new {x.Id, x.CompanyName, x.Address, x.City, x.Region.Name, x.PostalCode, x.Phone, x.Email }).ToList();
             }
+
+        }
+        private void UpdateSupplier()
+        {
+            ValidateAllEntry();
+            using (DataContext context = new DataContext())
+            {
+                if (selectedId != 0)
+                {
+                    if (companyName != string.Empty && address != string.Empty && city != string.Empty &&
+                    cmbRegion.Text != string.Empty && phoneNumber != string.Empty && email != string.Empty)
+                    {
+                        MessageBox.Show("selectedId = " + selectedId);
+                        Models.Supplier supplier = context.Supplier.Find(selectedId);
+                        if (supplier != null)
+                        {
+                            supplier.CompanyName = companyName;
+                            supplier.Address = address;
+                            supplier.City = city;
+                            supplier.RegionId = regionId;
+                            supplier.PostalCode = postalCode;
+                            supplier.Phone = phoneNumber;
+                            supplier.Email = email;
+                        }
+                        context.SaveChanges();
+                    }
+                }else
+                    MessageBox.Show("Please select a supplier to update");
+            }
+            ShowAllSuppliers();
         }
         private void DeleteSupplier()
         {
@@ -221,6 +250,14 @@ namespace InventoryManagementSystemSQLite
         {
             ShowAllSuppliers();
         }
+        private void btnEditSupplier_Click(object sender, EventArgs e)
+        {
+            UpdateSupplier();
+        }
+        private void btnDeleteSupplier_Click(object sender, EventArgs e)
+        {
+            DeleteSupplier();
+        }
         private void dtvSuppliers_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             //Avoid errors when clicking the header row
@@ -242,10 +279,6 @@ namespace InventoryManagementSystemSQLite
         }
 
 
-        private void btnDeleteSupplier_Click(object sender, EventArgs e)
-        {
-            DeleteSupplier();
-        }
         private void Supplier_Load(object sender, EventArgs e)
         {
 
@@ -254,5 +287,6 @@ namespace InventoryManagementSystemSQLite
         {
 
         }
+
     }
 }
