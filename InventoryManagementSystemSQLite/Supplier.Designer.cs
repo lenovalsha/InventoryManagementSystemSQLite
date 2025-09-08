@@ -101,6 +101,7 @@
             this.btnDeleteSupplier.TabIndex = 4;
             this.btnDeleteSupplier.Text = "Delete Supplier";
             this.btnDeleteSupplier.UseVisualStyleBackColor = true;
+            this.btnDeleteSupplier.Click += new System.EventHandler(this.btnDeleteSupplier_Click);
             // 
             // dtvSuppliers
             // 

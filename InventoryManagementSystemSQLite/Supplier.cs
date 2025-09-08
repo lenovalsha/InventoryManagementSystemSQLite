@@ -23,6 +23,7 @@ namespace InventoryManagementSystemSQLite
         string postalCode;
         string phoneNumber;
         string email;
+        int selectedId = 0;
         bool isSelected = false;
 
 
@@ -95,7 +96,7 @@ namespace InventoryManagementSystemSQLite
             using (DataContext context = new DataContext())
             {
                 //This will allow us to pick only the fields that we want to see, (it was originally showing RegionId and products)
-                dtvSuppliers.DataSource = context.Supplier.Select(x => new { x.CompanyName, x.Address, x.City, x.Region.Name, x.PostalCode, x.Phone, x.Email }).ToList();
+                dtvSuppliers.DataSource = context.Supplier.Select(x => new {x.Id, x.CompanyName, x.Address, x.City, x.Region.Name, x.PostalCode, x.Phone, x.Email }).ToList();
             }
 
         }
@@ -177,14 +178,21 @@ namespace InventoryManagementSystemSQLite
 
             }
         }
-        private void textBox4_TextChanged(object sender, EventArgs e)
+        private void DeleteSupplier()
         {
-
-        }
-
-        private void Supplier_Load(object sender, EventArgs e)
-        {
-
+            using (DataContext context = new DataContext())
+            {
+                if (selectedId != 0)
+                {
+                    var supplier = context.Supplier.FirstOrDefault(x => x.Id == selectedId);
+                    context.Supplier.Remove(supplier);
+                    selectedId = 0;
+                }
+                else
+                    MessageBox.Show("Please select a supplier to delete");
+                context.SaveChanges();
+            }
+            ShowAllSuppliers();
         }
 
         private void btnAddNewSupplier_Click(object sender, EventArgs e)
@@ -197,7 +205,7 @@ namespace InventoryManagementSystemSQLite
         private void btnAdd_Click(object sender, EventArgs e)
         {
             CreateSupplier();
-
+            ShowAllSuppliers();
         }
         private void btnTester_Click(object sender, EventArgs e)
         {
@@ -219,6 +227,7 @@ namespace InventoryManagementSystemSQLite
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = dtvSuppliers.Rows[e.RowIndex];
+                selectedId = int.Parse(row.Cells["Id"].Value.ToString());
                 txtCompanyName.Text = row.Cells["CompanyName"].Value.ToString();
                 txtAddress.Text = row.Cells["Address"].Value.ToString();
                 txtCity.Text = row.Cells["City"].Value.ToString();
@@ -232,10 +241,18 @@ namespace InventoryManagementSystemSQLite
                 btnEditSupplier.Enabled = false;
         }
 
+
+        private void btnDeleteSupplier_Click(object sender, EventArgs e)
+        {
+            DeleteSupplier();
+        }
+        private void Supplier_Load(object sender, EventArgs e)
+        {
+
+        }
         private void dtvSuppliers_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
-
     }
 }
