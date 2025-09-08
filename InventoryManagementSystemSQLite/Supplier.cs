@@ -16,6 +16,16 @@ namespace InventoryManagementSystemSQLite
     public partial class Supplier : Form
     {
         private List<Models.Region> regionList;
+        string companyName;
+        string address;
+        string city;
+        int regionId;
+        string postalCode;
+        string phoneNumber;
+        string email;
+
+
+
         public Supplier()
         {
             InitializeComponent();
@@ -47,26 +57,70 @@ namespace InventoryManagementSystemSQLite
         private void PostalValidation(string postal)
         {
             Regex r = new Regex(@"[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ][0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]");
-            if(r.IsMatch(postal))
-                MessageBox.Show("Valid");
+            if (r.IsMatch(postal))
+                postalCode = r.Match(postal).Value;
             else
-                MessageBox.Show("Invalid");
+                MessageBox.Show("Invalid Postal");
         }
-        private void EmailValidation(string email)
+        private void EmailValidation(string tmpEmail)
         {
             Regex regex = new Regex(@"[a-zA-Z0-9._-]+@[a-zA-Z.-]+\.[a-zA-Z]{2,}");
-            if(regex.IsMatch(email))
-                MessageBox.Show("Valid");
+            if (regex.IsMatch(tmpEmail))
+                email = tmpEmail;
             else
-                MessageBox.Show("Invalid");
+                MessageBox.Show("Invalid Email");
         }
         private void PhoneValidation(string phone)
         {
             Regex regex = new Regex(@"^(\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$");
             if (regex.IsMatch(phone))
-                MessageBox.Show("Valid");
+                phoneNumber = phone;
             else
-                MessageBox.Show("Invalid");
+                MessageBox.Show("Invalid phone");
+        }
+        private void ShowAllSuppliers()
+        {
+            using (DataContext context = new DataContext())
+            {
+                dtvSuppliers.DataSource = context.Supplier.ToList();
+                
+                
+            }
+            
+        }
+        private void CreateSupplier()
+        {
+            using (DataContext context = new DataContext())
+            {
+                //Validate them first
+                PostalValidation(txtPostalCode.Text);
+                PhoneValidation(txtPhoneNumber.Text);
+                EmailValidation(txtEmail.Text);
+                companyName = txtCompanyName.Text;
+                address = txtAddress.Text;
+                city = txtCity.Text;
+                //Make sure nothing is null
+                if (companyName != string.Empty || address != string.Empty || city != string.Empty ||
+                    cmbRegion.Text != string.Empty || phoneNumber != string.Empty || email != string.Empty)
+                {
+                    //Lets find the selected region and get the Id
+                    var region = context.Region.FirstOrDefault(x=> x.Name == cmbRegion.Text);
+                    if(region != null) 
+                        regionId = region.Id;
+                    context.Supplier.Add(new Models.Supplier()
+                    {
+                        CompanyName = companyName,
+                        Address = address,
+                        City = city,
+                        RegionId = regionId,
+                        PostalCode = postalCode,
+                        Phone = phoneNumber,
+                        Email = email
+                    });
+                    context.SaveChanges();
+                }else
+                    MessageBox.Show("Please complete all required field");
+            }
         }
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
@@ -80,7 +134,7 @@ namespace InventoryManagementSystemSQLite
 
         private void btnAddNewSupplier_Click(object sender, EventArgs e)
         {
-
+            CreateSupplier();
         }
 
         private void btnTester_Click(object sender, EventArgs e)
@@ -91,6 +145,11 @@ namespace InventoryManagementSystemSQLite
             //EmailValidation(email);
             string phone = txtPhoneNumber.Text;
             PhoneValidation(phone);
+        }
+
+        private void btnShowSuppliers_Click(object sender, EventArgs e)
+        {
+            ShowAllSuppliers();
         }
     }
 }

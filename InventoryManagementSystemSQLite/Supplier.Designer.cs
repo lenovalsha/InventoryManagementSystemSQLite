@@ -71,6 +71,7 @@
             this.btnShowSuppliers.TabIndex = 1;
             this.btnShowSuppliers.Text = "Show All Suppliers";
             this.btnShowSuppliers.UseVisualStyleBackColor = true;
+            this.btnShowSuppliers.Click += new System.EventHandler(this.btnShowSuppliers_Click);
             // 
             // btnAddNewSupplier
             // 
