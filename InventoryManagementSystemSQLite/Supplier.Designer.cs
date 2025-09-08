@@ -48,6 +48,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.btnTester = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dtvSuppliers)).BeginInit();
             this.SuspendLayout();
             // 
@@ -220,11 +221,22 @@
             this.label8.TabIndex = 19;
             this.label8.Text = "E-mail";
             // 
+            // btnTester
+            // 
+            this.btnTester.Location = new System.Drawing.Point(343, 304);
+            this.btnTester.Name = "btnTester";
+            this.btnTester.Size = new System.Drawing.Size(75, 23);
+            this.btnTester.TabIndex = 21;
+            this.btnTester.Text = "Test";
+            this.btnTester.UseVisualStyleBackColor = true;
+            this.btnTester.Click += new System.EventHandler(this.btnTester_Click);
+            // 
             // Supplier
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(557, 557);
+            this.Controls.Add(this.btnTester);
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.txtPhoneNumber);
@@ -276,5 +288,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button btnTester;
     }
 }

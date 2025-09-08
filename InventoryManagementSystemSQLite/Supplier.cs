@@ -4,9 +4,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace InventoryManagementSystemSQLite
 {
@@ -16,9 +19,9 @@ namespace InventoryManagementSystemSQLite
         public Supplier()
         {
             InitializeComponent();
-            AddRegions();
+            AddAllRegions();
         }
-        private void AddRegions()
+        private void AddAllRegions()
         {
             using (DataContext context = new DataContext())
             {
@@ -41,6 +44,30 @@ namespace InventoryManagementSystemSQLite
                 }
             }
         }
+        private void PostalValidation(string postal)
+        {
+            Regex r = new Regex(@"[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ][0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]");
+            if(r.IsMatch(postal))
+                MessageBox.Show("Valid");
+            else
+                MessageBox.Show("Invalid");
+        }
+        private void EmailValidation(string email)
+        {
+            Regex regex = new Regex(@"[a-zA-Z0-9._-]+@[a-zA-Z.-]+\.[a-zA-Z]{2,}");
+            if(regex.IsMatch(email))
+                MessageBox.Show("Valid");
+            else
+                MessageBox.Show("Invalid");
+        }
+        private void PhoneValidation(string phone)
+        {
+            Regex regex = new Regex(@"^(\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$");
+            if (regex.IsMatch(phone))
+                MessageBox.Show("Valid");
+            else
+                MessageBox.Show("Invalid");
+        }
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
 
@@ -54,6 +81,16 @@ namespace InventoryManagementSystemSQLite
         private void btnAddNewSupplier_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnTester_Click(object sender, EventArgs e)
+        {
+            string capitalized = txtPostalCode.Text.ToUpper();
+            //PostalRegex(capitalized);
+            string email = txtEmail.Text;
+            //EmailValidation(email);
+            string phone = txtPhoneNumber.Text;
+            PhoneValidation(phone);
         }
     }
 }
